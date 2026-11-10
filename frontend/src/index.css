@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ivory: #f9f6ee;
+  --color-beige: #efe3d1;
+  --color-sand: #d9c5a8;
+  --color-sage: #a8c3b0;
+  --color-forest: #3f5d4e;
+  --color-terracotta: #b06a4f;
+  --color-mustard: #d9a566;
+  --color-slate: #6b7b8b;
+  --color-ink: #2b2a26;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-hand: "Caveat", "Comic Sans MS", cursive;
+}
+
+html, body, #root { height: 100%; }
+body {
+  margin: 0; color: var(--color-ink); font-family: var(--font-sans);
+  background:
+    radial-gradient(circle at 12% 8%, rgba(168,195,176,.28), transparent 38%),
+    radial-gradient(circle at 92% 92%, rgba(217,165,102,.20), transparent 40%),
+    var(--color-ivory);
+}
+
+/* hand-drawn wobbly border: drawn on a pseudo-element so text stays crisp */
+.sketch { position: relative; background: var(--color-ivory); border-radius: 18px; }
+.sketch::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  border: 2px solid var(--color-ink); opacity: .8;
+  border-radius: 18px 22px 16px 24px / 22px 16px 24px 18px; filter: url(#rough);
+}
+.sketch-soft::before { border-width: 1.5px; opacity: .45; }
+.sketch-hover { transition: transform .25s ease; }
+.sketch-hover:hover { transform: translateY(-3px) rotate(-.4deg); }
+
+.font-hand { font-family: var(--font-hand); }
+.font-display { font-family: var(--font-display); }
+
+.draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.4s ease-out forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.rise { opacity: 0; animation: rise .6s ease-out forwards; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.bob { animation: bob 5s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-8px) rotate(1.5deg); } }
+.sway { transform-origin: bottom center; animation: sway 6s ease-in-out infinite; }
+@keyframes sway { 50% { transform: rotate(3deg); } }
+.pulse-dot { animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 50% { transform: scale(1.35); opacity: .6; } }
+.dash-flow { stroke-dasharray: 8 8; animation: flow 1s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -16; } }
+
+.react-flow__attribution { display: none; }
+.react-flow__controls { box-shadow: none; border: 2px solid var(--color-ink); border-radius: 12px; overflow: hidden; }
+.react-flow__controls-button { background: var(--color-ivory); border-bottom: 1px solid var(--color-sand); }
+@media (prefers-reduced-motion: reduce) { * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
+
+/* edge labels must stay clickable even when they overlap a paper card in a dense graph */
+.react-flow__edgelabel-renderer { z-index: 1100; }
+
+/* long unbroken words (e.g. file names used as titles) must wrap instead of stretching the page */
+main { overflow-wrap: anywhere; }

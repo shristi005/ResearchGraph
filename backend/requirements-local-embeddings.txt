@@ -1,0 +1,3 @@
+# OPTIONAL: only for EMBED_PROVIDER=local (runs nomic-embed-text-v1.5 inside the backend, no external embedding API).
+# Needs roughly 0.5-1 GB RAM - does NOT fit Render's free 512 MB instance.
+fastembed>=0.3

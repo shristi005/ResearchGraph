@@ -1,0 +1,33 @@
+# Render Blueprint (free web service). Secrets are marked sync:false: you paste them in the Render dashboard.
+services:
+  - type: web
+    name: researchgraph-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - { key: PYTHON_VERSION, value: 3.12.3 }
+      - { key: ENV, value: production }
+      - { key: STORAGE_BACKEND, value: supabase }
+      - { key: SUPABASE_BUCKET, value: papers }
+      - { key: EMBED_PROVIDER, value: ollama }
+      - { key: AI_PRIMARY_PROVIDER, value: ollama }
+      - { key: AI_FALLBACK_ENABLED, value: "false" }
+      - { key: OLLAMA_MODEL, value: "qwen2.5:3b" }
+      - { key: OLLAMA_EMBED_MODEL, value: nomic-embed-text }
+      - { key: OLLAMA_URL, sync: false }
+      - { key: OLLAMA_GATE_TOKEN, sync: false }
+      - { key: GROQ_MODEL, value: openai/gpt-oss-120b }
+      - { key: GEMINI_MODEL, value: gemini-2.5-flash }
+      - { key: SUPABASE_URL, sync: false }
+      - { key: SUPABASE_ANON_KEY, sync: false }
+      - { key: SUPABASE_SERVICE_ROLE_KEY, sync: false }
+      - { key: SUPABASE_JWT_SECRET, sync: false }
+      - { key: DATABASE_URL, sync: false }
+      - { key: GROQ_API_KEY, sync: false }
+      - { key: GEMINI_API_KEY, sync: false }
+      - { key: CORS_ORIGINS, sync: false }

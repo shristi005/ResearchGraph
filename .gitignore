@@ -1,0 +1,11 @@
+node_modules/
+dist/
+__pycache__/
+.venv/
+backend/data/
+.env
+.env.*
+!.env.example
+*.db
+backend/data/
+benchmark_results/

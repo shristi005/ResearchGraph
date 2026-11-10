@@ -1,0 +1,12 @@
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+pymupdf>=1.24
+sqlalchemy>=2.0
+psycopg[binary]>=3.1        # Supabase Postgres driver (use DATABASE_URL=postgresql+psycopg://...)
+networkx>=3.2
+scikit-learn>=1.4
+numpy>=1.26
+httpx>=0.27                 # Supabase Storage + token verification (AI calls use the standard library)
+pydantic>=2.6
+pytest>=8.0
