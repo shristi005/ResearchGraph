@@ -1,4 +1,8 @@
-from fastapi import FastAPI
+from pathlib import Path
+
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import CORS_ORIGINS
@@ -55,6 +59,9 @@ def ready():
 
 @app.get("/", include_in_schema=False)
 def root():
+    if FRONTEND_DIST.exists():
+        return FileResponse(FRONTEND_DIST / "index.html")
+
     from fastapi.responses import HTMLResponse
 
     return HTMLResponse(
@@ -65,3 +72,19 @@ def root():
         "(start it in a second terminal: <code>cd frontend</code>, <code>npm install</code>, <code>npm run dev</code>)</p>"
         "<p>API docs: <a href='/docs'>/docs</a> · Health: <a href='/api/health'>/api/health</a></p></body>"
     )
+
+
+# ---- Serve the built React app (frontend/dist is committed to git; see docs) ----
+FRONTEND_DIST = Path(__file__).resolve().parents[2] / "frontend" / "dist"
+if FRONTEND_DIST.exists():
+    if (FRONTEND_DIST / "assets").exists():
+        app.mount("/assets", StaticFiles(directory=FRONTEND_DIST / "assets"), name="assets")
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    def spa(full_path: str):
+        if full_path == "api" or full_path.startswith("api/"):
+            raise HTTPException(404, "Not found")
+        f = (FRONTEND_DIST / full_path).resolve()
+        if full_path and f.is_file() and FRONTEND_DIST.resolve() in f.parents:
+            return FileResponse(f)
+        return FileResponse(FRONTEND_DIST / "index.html")  # React Router pages like /graph
